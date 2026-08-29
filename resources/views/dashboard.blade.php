@@ -1,27 +1,62 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Available Job Openings') }}
-        </h2>
-    </x-slot>
+@extends('adminlte::page')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <h3 class="text-lg font-bold mb-4">Software Engineer</h3>
-                <p class="text-gray-600 mb-4">Looking for a full-stack Laravel & Python developer...</p>
+{{-- Hide sidebar and adjust content width for guest visitors --}}
+@guest
+    @push('css')
+        <style>
+            .main-sidebar, 
+            .main-header .nav-link[data-widget="pushmenu"] {
+                display: none !important;
+            }
+            .content-wrapper, 
+            .main-footer, 
+            .main-header {
+                margin-left: 0 !important;
+            }
+        </style>
+    @endpush
+@endguest
 
-                {{-- Restrict Apply Button for Unauthenticated Users --}}
-                @auth
-                    @if(Auth::user()->role === 'candidate')
-                        <a href="#" class="bg-blue-600 text-white px-4 py-2 rounded">Apply Now</a>
-                    @endif
-                @else
-                    <a href="{{ route('login') }}" class="bg-gray-500 text-white px-4 py-2 rounded">
-                        Log in to Apply
+@section('title', 'Dashboard')
+
+@section('content_header')
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>HireMetrics Portal</h1>
+    </div>
+@endsection
+
+@section('content')
+<div class="container-fluid">
+    @guest
+        {{-- Guest Welcome Banner --}}
+        <div class="jumbotron bg-white shadow-sm border">
+            <h1 class="display-4 font-weight-bold text-dark">Welcome to Hire<span class="text-primary">Metrics</span></h1>
+            <p class="lead">Discover top job opportunities or manage your professional resume with automated screening.</p>
+            <hr class="my-4">
+            <p>Sign in to build your candidate profile, attach your CV, and start applying.</p>
+            <a class="btn btn-primary btn-lg" href="{{ route('login') }}" role="button">Log In</a>
+            <a class="btn btn-outline-secondary btn-lg" href="{{ route('register') }}" role="button">Create Account</a>
+        </div>
+    @endguest
+
+    @auth
+        {{-- Logged-In Candidate Dashboard --}}
+        <div class="row">
+            <div class="col-lg-4 col-6">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>Profile</h3>
+                        <p>Manage CV & Information</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <a href="{{ route('dashboard') }}" class="small-box-footer">
+                        Edit Profile <i class="fas fa-arrow-circle-right"></i>
                     </a>
-                @endauth
+                </div>
             </div>
         </div>
-    </div>
-</x-app-layout>
+    @endauth
+</div>
+@endsection

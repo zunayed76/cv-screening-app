@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // Public Candidate Dashboard (Accessible by Guests and Logged-in Candidates)
@@ -25,9 +26,10 @@ Route::get('/dashboard', function () {
     }
 
     return match (Auth::user()->role) {
-        'admin' => redirect()->route('admin.dashboard'),
-        'company' => redirect()->route('company.dashboard'),
-        default => redirect()->route('home'),
+        'admin'     => redirect()->route('admin.dashboard'),
+        'company'   => redirect()->route('company.dashboard'),
+        'candidate' => view('dashboard'),
+        default     => view('dashboard'),
     };
 })->name('dashboard');
 
