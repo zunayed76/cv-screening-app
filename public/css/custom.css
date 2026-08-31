@@ -1,0 +1,21 @@
+/* Force Chrome Autofill to match AdminLTE Dark Mode */
+.dark-mode input:-webkit-autofill,
+.dark-mode input:-webkit-autofill:hover,
+.dark-mode input:-webkit-autofill:focus,
+.dark-mode input:-webkit-autofill:active,
+.dark-mode textarea:-webkit-autofill,
+.dark-mode textarea:-webkit-autofill:hover,
+.dark-mode textarea:-webkit-autofill:focus,
+.dark-mode textarea:-webkit-autofill:active,
+.dark-mode select:-webkit-autofill,
+.dark-mode select:-webkit-autofill:hover,
+.dark-mode select:-webkit-autofill:focus,
+.dark-mode select:-webkit-autofill:active {
+    /* Covers autofill yellow/blue background with AdminLTE input dark background */
+    -webkit-box-shadow: 0 0 0px 1000px #3f474e inset !important;
+    box-shadow: 0 0 0px 1000px #3f474e inset !important;
+    
+    /* Forces white text color */
+    -webkit-text-fill-color: #ffffff !important;
+    caret-color: #ffffff !important;
+}

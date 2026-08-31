@@ -41,7 +41,7 @@
 
     @auth
         {{-- Logged-In Candidate Dashboard --}}
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-lg-4 col-6">
                 <div class="small-box bg-info">
                     <div class="inner">
@@ -56,7 +56,7 @@
                     </a>
                 </div>
             </div>
-        </div>
+        </div> --}}
     @endauth
 </div>
 @endsection

@@ -323,24 +323,43 @@ return [
 
         // Sidebar items:
         [
-            'text' => 'My Profile & CV',
-            'url'  => 'candidate/profile',
-            'icon' => 'fas fa-fw fa-user-tie',
+            'text' => 'Create/ Edit CV',
+            'route' => 'candidate-profile.show',
+            'icon' => 'fas fa-fw fa-user-circle',
+            'active' => ['candidate-profile*'], // Keeps highlighted on edit route
             'auth' => true,
+            'can'     => 'is-candidate',
         ],
-        ['header' => 'account_settings'],
+        
+        // Candidate Account Settings Header
         [
-            'text' => 'profile',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
-            'auth' => true,
+            'header' => 'ACCOUNT SETTINGS',
+            'can'    => 'is-candidate',
         ],
         [
-            'text' => 'change_password',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-            'auth' => true,
+            'text'  => 'Profile',
+            'url'   => 'profile',
+            'icon'  => 'fas fa-fw fa-user',
+            'can'   => 'is-candidate',
         ],
+
+        // Company Account Settings Header
+        [
+            'header' => 'COMPANY SETTINGS',
+            'can'    => ['is-company'],
+        ],
+        [
+            'text'  => 'Company Profile',
+            'url' => 'profile', // Points directly to company settings route
+            'icon'  => 'fas fa-fw fa-building',
+            'can'   => ['is-company'],
+        ],
+        // [
+        //     'text' => 'change_password',
+        //     'url' => 'profile/change-password',
+        //     'icon' => 'fas fa-fw fa-lock',
+        //     'auth' => true,
+        // ],
         // [
         //     'text' => 'multilevel',
         //     'icon' => 'fas fa-fw fa-share',
@@ -502,6 +521,9 @@ return [
                 ],
             ],
         ],
+    ],
+    'extra_css' => [
+        'css/custom.css', // Path relative to public directory
     ],
 
     /*
