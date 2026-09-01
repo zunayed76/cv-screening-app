@@ -330,7 +330,22 @@ return [
             'auth' => true,
             'can'     => 'is-candidate',
         ],
-        
+        [
+            'text' => 'Post New Job',
+            'route' => 'jobs.create',
+            'icon' => 'fas fa-fw fa-plus-circle',
+            'active' => ['jobs/create', 'jobs*'],
+            'auth' => true,
+            'can' => 'is-company',
+        ],
+        [
+            'text' => 'Manage Jobs',
+            'route' => 'jobs.index',
+            'icon' => 'fas fa-fw fa-briefcase',
+            'active' => ['jobs'],
+            'auth' => true,
+            'can' => 'is-company',
+        ],
         // Candidate Account Settings Header
         [
             'header' => 'ACCOUNT SETTINGS',

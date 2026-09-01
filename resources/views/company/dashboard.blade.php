@@ -29,13 +29,15 @@
         <div class="col-lg-3 col-6">
             <div class="small-box bg-success">
                 <div class="inner">
-                    <h3>{{ $stats['active_jobs'] }}</h3>
+                    <h3>{{ $stats['active_jobs'] ?? 0 }}</h3>
                     <p>Active Job Posts</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-briefcase"></i>
                 </div>
-                <a href="#" class="small-box-footer">Manage Jobs <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ route('jobs.index') }}" class="small-box-footer">
+                    Manage Jobs <i class="fas fa-arrow-circle-right"></i>
+                </a>
             </div>
         </div>
 
@@ -133,7 +135,7 @@
                     <h3 class="card-title"><i class="fas fa-rocket mr-1"></i> Quick Actions</h3>
                 </div>
                 <div class="card-body">
-                    <a href="#" class="btn btn-primary btn-block mb-2">
+                    <a href="{{ route('jobs.create') }}" class="btn btn-primary btn-block mb-2">
                         <i class="fas fa-plus-circle mr-1"></i> Post New Job Opportunity
                     </a>
                     <a href="#" class="btn btn-outline-info btn-block mb-2">

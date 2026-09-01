@@ -5,35 +5,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CandidateProfileController;
 use App\Http\Controllers\CompanyDashboardController;
+use App\Http\Controllers\JobController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ApplicationController;
 
-// Public Candidate Dashboard (Accessible by Guests and Logged-in Candidates)
-Route::get('/', function () {
-    // Redirect admin and company users directly to their portals
-    if (Auth::check()) {
-        if (Auth::user()->role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        }
-        if (Auth::user()->role === 'company') {
-            return redirect()->route('company.dashboard');
-        }
-    }
-
-    return view('dashboard'); // Public job portal view
-})->name('home');
-
-// Post-Login Route Dispatcher
-Route::get('/dashboard', function () {
-    if (!Auth::check()) {
-        return redirect()->route('home');
-    }
-
-    return match (Auth::user()->role) {
-        'admin'     => redirect()->route('admin.dashboard'),
-        'company'   => redirect()->route('company.dashboard'),
-        'candidate' => view('dashboard'),
-        default     => view('dashboard'),
-    };
-})->name('dashboard');
+// Public Home & Post-Login Dispatcher (Handles Guests & Candidates)
+Route::get('/', [DashboardController::class, 'index'])->name('home');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // Protected Admin Panel
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
@@ -48,8 +26,9 @@ Route::middleware(['auth', 'role:company,admin'])->prefix('company')->group(func
 });
 
 // Protected Candidate Actions (Applying to jobs)
+
 Route::middleware(['auth', 'role:candidate'])->group(function () {
-    // Job application POST routes will be placed here
+    Route::post('/jobs/{job}/apply', [ApplicationController::class, 'store'])->name('jobs.apply');
 });
 
 // Profile Management Routes (Breeze)
@@ -63,5 +42,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/candidate-profile/edit', [CandidateProfileController::class, 'edit'])->name('candidate-profile.edit');
     Route::put('/candidate-profile', [CandidateProfileController::class, 'update'])->name('candidate-profile.update');
     Route::delete('/candidate-profile', [CandidateProfileController::class, 'destroy'])->name('candidate-profile.destroy');
+});
+Route::middleware(['auth', 'role:company'])->group(function () {
+    Route::resource('jobs', JobController::class);
 });
 require __DIR__.'/auth.php';
