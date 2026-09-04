@@ -37,7 +37,11 @@
             <tbody>
                 @forelse($jobs as $job)
                     <tr>
-                        <td><strong>{{ $job->title }}</strong></td>
+                        <td>
+                            <a href="{{ route('jobs.show', $job->id) }}" class="text-dark font-weight-bold">
+                                {{ $job->title }}
+                            </a>
+                        </td>
                         <td>
                             <span class="badge badge-info">{{ ucfirst($job->type) }}</span>
                         </td>
@@ -45,9 +49,17 @@
                         <td>{{ $job->deadline ? \Carbon\Carbon::parse($job->deadline)->format('M d, Y') : 'N/A' }}</td>
                         <td>{{ $job->created_at->format('M d, Y') }}</td>
                         <td class="text-right">
+                            <!-- AI Candidate Ranking Button -->
+                            <a href="{{ route('jobs.show', $job->id) }}" class="btn btn-sm btn-primary mr-1" title="View Candidates & AI Scores">
+                                <i class="fas fa-brain"></i>
+                                Candidates
+                                <span class="badge badge-light ml-1">{{ $job->applications_count ?? $job->applications->count() }}</span>
+                            </a>
+
                             <a href="{{ route('jobs.edit', $job->id) }}" class="btn btn-sm btn-warning mr-1">
                                 <i class="fas fa-edit"></i> Edit
                             </a>
+                            
                             <form action="{{ route('jobs.destroy', $job->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this job posting?');">
                                 @csrf
                                 @method('DELETE')

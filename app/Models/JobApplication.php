@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,6 +15,8 @@ class JobApplication extends Model
         'user_id',
         'job_id',
         'status',
+        'embedding_score',
+        'keyword_score',
     ];
 
     public function candidate()

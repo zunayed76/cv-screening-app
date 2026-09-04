@@ -22,7 +22,7 @@
                 <div class="icon">
                     <i class="fas fa-users"></i>
                 </div>
-                <a href="#" class="small-box-footer">View Candidates <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="#" class="small-box-footer"><i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
 
@@ -53,20 +53,6 @@
                 <a href="#" class="small-box-footer">Review Applications <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
-
-        <div class="col-lg-3 col-6">
-            <div class="small-box bg-danger">
-                <div class="inner">
-                    <h3>{{ $stats['new_candidates'] }}</h3>
-                    <p>New This Week</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-user-plus"></i>
-                </div>
-                <a href="#" class="small-box-footer">More Info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-        </div>
-    </div>
 
     <div class="row">
         {{-- Recent Candidate Profiles Table --}}
@@ -138,16 +124,13 @@
                     <a href="{{ route('jobs.create') }}" class="btn btn-primary btn-block mb-2">
                         <i class="fas fa-plus-circle mr-1"></i> Post New Job Opportunity
                     </a>
-                    <a href="#" class="btn btn-outline-info btn-block mb-2">
-                        <i class="fas fa-search mr-1"></i> Search Candidate Database
-                    </a>
-                    <a href="#" class="btn btn-outline-secondary btn-block">
+                    <a href="{{ route('profile.edit') }}" class="btn btn-outline-secondary btn-block">
                         <i class="fas fa-cog mr-1"></i> Company Settings
                     </a>
                 </div>
             </div>
 
-            <div class="card card-outline card-info">
+            {{-- <div class="card card-outline card-info">
                 <div class="card-header">
                     <h3 class="card-title"><i class="fas fa-info-circle mr-1"></i> Status Overview</h3>
                 </div>
@@ -167,7 +150,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>

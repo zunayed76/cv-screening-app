@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Smalot\PdfParser\Parser;
 
 class CandidateProfile extends Model
 {
@@ -47,5 +48,25 @@ class CandidateProfile extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    /**
+     * Parse stored PDF and return raw extracted text for Python API
+     */
+    public function getCvTextAttribute(): string
+    {
+        $fullPath = storage_path('app/public/' . $this->cv_path);
+
+        if ($this->cv_path && file_exists($fullPath)) {
+            try {
+                $parser = new Parser();
+                $pdf = $parser->parseFile($fullPath);
+                return trim(preg_replace('/\s+/', ' ', $pdf->getText()));
+            } catch (\Exception $e) {
+                // Fallback text if file reading fails
+            }
+        }
+
+        $skillsText = is_array($this->skills) ? implode(', ', $this->skills) : $this->skills;
+        return "Title: {$this->current_title}. Field: {$this->job_field}. Skills: {$skillsText}. Experience: {$this->experience_years} years.";
     }
 }
