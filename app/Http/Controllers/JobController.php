@@ -71,33 +71,16 @@ class JobController extends Controller
     public function show($id)
     {
         $job = Job::with(['applications.candidate.candidateProfile'])->findOrFail($id);
-        $parser = new Parser();
 
-        // 1. Prepare candidates payload with parsed PDF text
-        $candidatePayload = [];
-
-        foreach ($job->applications as $application) {
-            $cvText = '';
-            $profile = $application->candidate->candidateProfile ?? null;
-
-            if ($profile && $profile->resume_path && file_exists(storage_path('app/public/' . $profile->resume_path))) {
-                try {
-                    $pdf = $parser->parseFile(storage_path('app/public/' . $profile->resume_path));
-                    $cvText = $pdf->getText();
-                } catch (\Exception $e) {
-                    $cvText = $profile->bio ?? '';
-                }
-            } else {
-                $cvText = $profile->bio ?? 'No resume uploaded.';
-            }
-
-            $candidatePayload[] = [
-                'id'   => $application->id,
-                'text' => $cvText,
+        // 1. Prepare candidates payload using the cv_text accessor from CandidateProfile model
+        $candidatePayload = $job->applications->map(function ($app) {
+            return [
+                'id'   => $app->id, // JobApplication primary key
+                'text' => $app->candidate?->candidateProfile?->cv_text ?? 'No candidate profile details provided.',
             ];
-        }
+        })->toArray();
 
-        // 2. Call Python FastAPI AI Scoring API
+        // 2. Post to Python FastAPI AI Scoring service
         if (!empty($candidatePayload)) {
             try {
                 $response = Http::timeout(15)->post('http://127.0.0.1:8000/score', [
@@ -106,7 +89,7 @@ class JobController extends Controller
                 ]);
 
                 if ($response->successful()) {
-                    $rankings = collect($response->json()['rankings']);
+                    $rankings = $response->json()['rankings'] ?? [];
 
                     foreach ($rankings as $rank) {
                         JobApplication::where('id', $rank['candidate_id'])->update([
@@ -116,11 +99,11 @@ class JobController extends Controller
                     }
                 }
             } catch (\Exception $e) {
-                // If Python API is offline, fall back to existing saved scores in DB
+                // Microservice offline: fallback gracefully to last calculated DB scores
             }
         }
 
-        // 3. Get updated applications sorted by highest AI match score
+        // 3. Retrieve applications ordered by top embedding match
         $applications = JobApplication::with('candidate.candidateProfile')
             ->where('job_id', $job->id)
             ->orderByDesc('embedding_score')

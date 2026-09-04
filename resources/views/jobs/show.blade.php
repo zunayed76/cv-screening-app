@@ -95,6 +95,7 @@
                                             <span class="text-muted small">No CV</span>
                                         @endif
                                     </td>
+                                    
                                 </tr>
                             @empty
                                 <tr>

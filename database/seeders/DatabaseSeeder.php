@@ -22,20 +22,17 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 2. Create 200 Jobs distributed among the 10 Companies
-        foreach (range(1, 200) as $i) {
+        foreach (range(1, 30) as $i) {
             Job::factory()->create([
                 'user_id' => $companies->random()->id,
             ]);
         }
 
         // 3. Create 500 Candidate Users with corresponding CandidateProfiles
+                // Create 500 Candidate Users ONLY
         User::factory()->count(500)->create([
             'role'     => 'candidate',
             'password' => $defaultPassword,
-        ])->each(function ($user) {
-            CandidateProfile::factory()->create([
-                'user_id' => $user->id,
-            ]);
-        });
+        ]);
     }
 }
